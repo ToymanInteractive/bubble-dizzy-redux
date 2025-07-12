@@ -25,6 +25,14 @@ jobs:
     steps:
     - name: Checkout
       uses: actions/checkout@v4
+    - name: Build Number
+      run: |
+        TMP_JOB_ID="$GITHUB_RUN_ID"
+        TMP_BRANCH=$(basename ${GITHUB_REF#refs/heads/})
+        TMP_PR_ID="$PULL_REQUEST"
+        TMP_COMMIT=$(git rev-parse --short "$GITHUB_SHA")
+
+        echo "BUILD_NUMBER=${TMP_JOB_ID}-${TMP_BRANCH}-${TMP_PR_ID}-${TMP_COMMIT}" >> $GITHUB_ENV
     - name: Configure
       run: |
         cmake --preset ${{ matrix.cmake_preset }}
